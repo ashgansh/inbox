@@ -14,49 +14,6 @@ services:
       - fromGroup: mysql
 
 
-  - type: web
-    name: minio-server
-    healthCheckPath: /minio/health/live
-    runtime: image
-    image:
-      url: docker.io/minio/minio:latest
-    dockerCommand: minio server /data --address $HOST:$PORT --console-address $HOST:$CONSOLE_PORT
-    autoDeploy: false
-    disk:
-      name: data
-      mountPath: /data
-    envVars:
-      - key: MINIO_ROOT_USER
-        generateValue: true
-      - key: MINIO_ROOT_PASSWORD
-        generateValue: true
-      - key: HOST
-        value: "0.0.0.0"
-      - key: PORT
-        value: 9000
-      - key: CONSOLE_PORT
-        value: 9090
-
-  - type: web
-    name: minio-console
-    runtime: docker
-    dockerContext: ./render/minio/
-    dockerfilePath: ./render/minio/Dockerfile
-    autoDeploy: false
-    envVars:
-      - key: PORT
-        value: 10000
-      - key: MINIO_HOST
-        fromService:
-          name: minio-server
-          type: web
-          property: host
-      - key: MINIO_CONSOLE_PORT
-        fromService:
-          name: minio-server
-          type: web
-          envVarKey: CONSOLE_PORT
-
 envVarGroups:
   - name: mysql
     envVars:
