@@ -13,6 +13,7 @@ services:
     envVars:
       - fromGroup: mysql
 
+
   - type: web
     name: minio-server
     healthCheckPath: /minio/health/live
