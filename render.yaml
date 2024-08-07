@@ -3,6 +3,8 @@ services:
     name: mysql
     plan: standard
     runtime: docker
+    dockerContext: ./render/mysql/
+    dockerfilePath: ./render/mysql/Dockerfile
     autoDeploy: false
     disk:
       name: mysql
