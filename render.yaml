@@ -2,8 +2,9 @@ services:
   - type: pserv
     name: mysql
     plan: standard
-    env: docker
+    runtime: docker
     autoDeploy: false
+    dockerfilePath: ./@render/mysql/Dockerfile
     disk:
       name: mysql
       mountPath: /var/lib/mysql
@@ -14,9 +15,8 @@ services:
   - type: web
     name: minio-server
     healthCheckPath: /minio/health/live
-    runtime: image
-    image:
-      url: docker.io/minio/minio:latest
+    runtime: docker
+    dockerfilePath: ./@render/minio/Dockerfile
     dockerCommand: minio server /data --address $HOST:$PORT --console-address $HOST:$CONSOLE_PORT
     autoDeploy: false
     disk:
@@ -37,7 +37,7 @@ services:
   - type: web
     name: minio-console
     runtime: docker
-    dockerContext: /
+    dockerContext: ./@render/minio-console
     dockerfilePath: ./Dockerfile
     autoDeploy: false
     envVars:
